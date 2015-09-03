@@ -20,7 +20,7 @@ public class PersonRepositoryImp implements PersonRepository {
 	}
 
 	public void update(Person person) {
-		manager.persist(person);
+		manager.merge(person);
 	}
 
 	public Person find(long id) {
