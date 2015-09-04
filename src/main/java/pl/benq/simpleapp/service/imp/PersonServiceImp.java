@@ -18,15 +18,15 @@ public class PersonServiceImp implements PersonService {
 	PersonRepository personRepository;
 	
 	public void persist(Person person) {
-		personRepository.persist(person);
+		personRepository.save(person);
 	}
 
 	public void update(Person person) {
-		personRepository.update(person);
+		personRepository.save(person);
 	}
 
 	public Person find(long id) {
-		return personRepository.find(id);
+		return personRepository.findOne(id);
 	}
 
 	public List<Person> findAll() {

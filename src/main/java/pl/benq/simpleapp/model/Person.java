@@ -10,25 +10,26 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-import javax.persistence.TableGenerator;
+import javax.persistence.SequenceGenerator;
 
 @Entity
+@SequenceGenerator(name = Person.SEQUENCE_NAME, sequenceName = Person.SEQUENCE_NAME, initialValue = 1, allocationSize = 1)
 public class Person {
-	
+
+	public static final String SEQUENCE_NAME = "PERSON_SEQUENCE";
+
 	@Id
-	@TableGenerator(name="id_generator",table="table_id_storage",pkColumnName="table_name"
-		,valueColumnName="stored_id")
-	@GeneratedValue(strategy=GenerationType.TABLE, generator="id_generator")
-	@Column(name="person_id",nullable=false)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = Person.SEQUENCE_NAME)
+	@Column(name = "person_id", nullable = false)
 	private long id;
-	
-	@Column(name="person_name",nullable=false,length=30)
+
+	@Column(name = "person_name", nullable = false, length = 30)
 	private String name;
-	
-	@Column(name="person_surname",nullable=false,length=60)
+
+	@Column(name = "person_surname", nullable = false, length = 60)
 	private String surname;
-	
-	@OneToMany(mappedBy="owner",cascade={CascadeType.PERSIST,CascadeType.MERGE},fetch=FetchType.EAGER)
+
+	@OneToMany(mappedBy = "owner", cascade = { CascadeType.PERSIST, CascadeType.MERGE }, fetch = FetchType.EAGER)
 	private List<Phone> phones;
 
 	public String getName() {
