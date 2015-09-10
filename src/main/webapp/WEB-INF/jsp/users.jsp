@@ -6,7 +6,10 @@
 <head>
 <link rel="stylesheet" type="text/css"
 	href="<c:url value="/app/css/main.css" />">
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+<script src="http://code.jquery.com/ui/1.11.1/jquery-ui.min.js"></script>
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.css" />
+
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Insert title here</title>
 </head>
@@ -35,40 +38,69 @@
 					</c:if>
 				</td>
 				<td>
-					<button id="${person.id}">Show</button>
+					<button class="showbutton" id="${person.id}">Show</button>
 				</td>
 			</tr>
 		</c:forEach>
 	</table>
 	
-	<div id="s"></div>
-	<script>		
-			$("button").click(function(){
+	<div id="phonediv" style="padding-top: 10px"></div>
+	<div id="phoneAddDiv" title="Add new phone">
+		<form name="phoneform " action="${pageContext.request.contextPath}/app/addPhone" method="POST">
+			<input type="text" name="type"/>
+			<input type="text" name="number"/>
+			<input type="submit" value="Add">
+		</form>
+	</div>
+	
+	<script>	
+	$(function(){
+		
+	var LAST_CLICKED_BUTTON = -1;
+	var DIALOG;
+		
+			$("button.showbutton").click(function(){
 				var id = $( this).attr("id");
-				var dataForRequest = "id="+id;
-				
+				var dataForRequest = "id="+id;				
+				if(id == LAST_CLICKED_BUTTON){
+					$("#phonediv").slideUp();
+					LAST_CLICKED_BUTTON = -1;
+					return;
+				}				
+				LAST_CLICKED_BUTTON = id;				
 				$.ajax({
 					url:"${pageContext.request.contextPath}/app/personphones",
 					type:"GET",
 					data:dataForRequest,
 					async:false,				
 					success:function(response){
-						var htmlGenerate = "<table class=\"userTable\" <tr><th>Type</th><th>Number</th></tr>";
-						
-						for(i=0;i<response.length;i++)
-						{
+						var htmlGenerate = "<table class=\"userTable\" <tr><th>Type</th><th>Number</th></tr>";						
+						for(i=0;i<response.length;i++){
 							htmlGenerate+="<tr>";
 							htmlGenerate+="<td>"+response[i].type+"</td>";
 							htmlGenerate+="<td>"+response[i].number+"</td>";
 							htmlGenerate+="</tr>";
-						}
-						
+						}						
+						htmlGenerate+="<tr><td colspan=\"2\" align=\"center\"><button id=\"phoneFormButton\" onclick=\"showDialog()\">Add new phone</button></td></tr>"
 						htmlGenerate+="</table>";
-						$("#s").html(htmlGenerate);
-						
+						$("#phonediv").html(htmlGenerate);
+						$("#phonediv").slideDown();						
 					}					
 				})
-			})		
+			})	
+	})
+	
+	function showDialog(){
+		DIALOG.dialog("open");	
+	}
+	
+	DIALOG = $("#phoneAddDiv").dialog({
+	      autoOpen: false,	 
+	      modal:true,
+	})
+	
+	
+	
 	</script>
 </body>
 </html>
