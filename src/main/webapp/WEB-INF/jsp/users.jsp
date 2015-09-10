@@ -47,9 +47,13 @@
 	<div id="phonediv" style="padding-top: 10px"></div>
 	<div id="phoneAddDiv" title="Add new phone">
 		<form name="phoneform " action="${pageContext.request.contextPath}/app/addPhone" method="POST">
+		<fieldset>
+		<label>Type</label>
 			<input type="text" name="type"/>
+		<label>Number</label>
 			<input type="text" name="number"/>
 			<input type="submit" value="Add">
+		</fieldset>
 		</form>
 	</div>
 	
@@ -98,9 +102,6 @@
 	      autoOpen: false,	 
 	      modal:true,
 	})
-	
-	
-	
 	</script>
 </body>
 </html>
