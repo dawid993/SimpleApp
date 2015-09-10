@@ -1,6 +1,8 @@
 package pl.benq.simpleapp.testrun;
 
 
+import java.util.Date;
+
 import javax.transaction.SystemException;
 
 import org.springframework.context.ApplicationContext;
@@ -17,6 +19,9 @@ public class DataBaseTestRun {
 		Person person = new Person();
 		person.setName("David");
 		person.setSurname("Benq");
+		person.setCity("Lublin");
+		person.setVipStatus(true);
+		person.setBornDate(new Date());
 		
 		service.persist(person);
 	}
