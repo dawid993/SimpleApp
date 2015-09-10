@@ -49,7 +49,8 @@ public class Person {
 	@Column(name="vip_status",nullable = true,table="person_details")
 	private boolean vipStatus;	
 
-	@OneToMany(mappedBy = "owner", cascade = { CascadeType.PERSIST, CascadeType.MERGE }, fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "owner", cascade = { CascadeType.PERSIST, CascadeType.MERGE }, 
+			fetch = FetchType.EAGER,orphanRemoval=true)
 	private List<Phone> phones;
 
 	public String getName() {
@@ -83,7 +84,7 @@ public class Person {
 	public Date getBornDate() {
 		return bornDate;
 	}
-
+	
 	public void setBornDate(Date bornDate) {
 		this.bornDate = bornDate;
 	}
@@ -99,4 +100,9 @@ public class Person {
 	public void setPhones(List<Phone> phones) {
 		this.phones = phones;
 	}
+	
+	public long getId() {
+		return id;
+	}
+
 }

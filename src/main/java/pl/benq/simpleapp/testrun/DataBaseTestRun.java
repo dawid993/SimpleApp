@@ -1,8 +1,6 @@
 package pl.benq.simpleapp.testrun;
 
 
-import java.util.Date;
-
 import javax.transaction.SystemException;
 
 import org.springframework.context.ApplicationContext;
@@ -16,14 +14,12 @@ public class DataBaseTestRun {
 		ApplicationContext context = new ClassPathXmlApplicationContext("spring-bean.xml");
 		PersonService service = (PersonService) context.getBean("personServiceImp");
 		
-		Person person = new Person();
-		person.setName("David");
-		person.setSurname("Benq");
-		person.setCity("Lublin");
-		person.setVipStatus(true);
-		person.setBornDate(new Date());
+		Person person = service.find(1);
+		person.getPhones().remove(0);
 		
-		service.persist(person);
+		System.out.println(person.getPhones());
+		service.update(person);
+		
 	}
 		
 }

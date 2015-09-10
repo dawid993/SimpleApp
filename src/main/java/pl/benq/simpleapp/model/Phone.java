@@ -10,8 +10,11 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 @Entity
 @SequenceGenerator(name = Phone.SEQUENCE_NAME, sequenceName = Phone.SEQUENCE_NAME, initialValue = 1, allocationSize = 1)
+@JsonIgnoreProperties("owner")
 public class Phone {
 
 	public static final String SEQUENCE_NAME = "PHONE_SEQUENCE";
