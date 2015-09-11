@@ -46,23 +46,20 @@
 	
 	<div id="phonediv" style="padding-top: 10px"></div>
 	<div id="phoneAddDiv" title="Add new phone">
-		<form name="phoneform " action="${pageContext.request.contextPath}/app/addPhone" method="POST">
-		<fieldset>
+		<form name="phoneform" class="dialog-form">
 		<label>Type</label>
-			<input type="text" name="type"/>
+			<input type="text" id="type"/>
 		<label>Number</label>
-			<input type="text" name="number"/>
-			<input type="submit" value="Add">
-		</fieldset>
+			<input type="text" id="number"/>			
 		</form>
+		<button id="phone-add-submit-button">Add</button>
 	</div>
 	
 	<script>	
-	$(function(){
-		
 	var LAST_CLICKED_BUTTON = -1;
 	var DIALOG;
-		
+	
+	$(function(){	
 			$("button.showbutton").click(function(){
 				var id = $( this).attr("id");
 				var dataForRequest = "id="+id;				
@@ -78,24 +75,43 @@
 					data:dataForRequest,
 					async:false,				
 					success:function(response){
-						var htmlGenerate = "<table class=\"userTable\" <tr><th>Type</th><th>Number</th></tr>";						
-						for(i=0;i<response.length;i++){
-							htmlGenerate+="<tr>";
-							htmlGenerate+="<td>"+response[i].type+"</td>";
-							htmlGenerate+="<td>"+response[i].number+"</td>";
-							htmlGenerate+="</tr>";
-						}						
-						htmlGenerate+="<tr><td colspan=\"2\" align=\"center\"><button id=\"phoneFormButton\" onclick=\"showDialog()\">Add new phone</button></td></tr>"
-						htmlGenerate+="</table>";
-						$("#phonediv").html(htmlGenerate);
-						$("#phonediv").slideDown();						
+						generateAJAXHTML(response);			
 					}					
 				})
 			})	
+			
+			$("#phone-add-submit-button").click(function(){				
+				$.ajax({
+					url:"${pageContext.request.contextPath}/app/addPhone",
+					type:"POST",
+					data:"type="+$("#type").val()+"&number="+$("#number").val()+"&id="+LAST_CLICKED_BUTTON,
+					success:function(response){
+						generateAJAXHTML(response);
+						$("#type").val("");
+						$("#number").val("");
+						DIALOG.dialog("close");
+					}
+				})					
+			})
 	})
 	
 	function showDialog(){
 		DIALOG.dialog("open");	
+	}
+	
+	function generateAJAXHTML(response)
+	{
+		var htmlGenerate = "<table class=\"userTable\" <tr><th>Type</th><th>Number</th></tr>";						
+		for(i=0;i<response.length;i++){
+			htmlGenerate+="<tr>";
+			htmlGenerate+="<td>"+response[i].type+"</td>";
+			htmlGenerate+="<td>"+response[i].number+"</td>";
+			htmlGenerate+="</tr>";
+		}						
+		htmlGenerate+="<tr><td colspan=\"2\" align=\"center\"><button id=\"phoneFormButton\" onclick=\"showDialog()\">Add new phone</button></td></tr>"
+		htmlGenerate+="</table>";
+		$("#phonediv").html(htmlGenerate);
+		$("#phonediv").slideDown();			
 	}
 	
 	DIALOG = $("#phoneAddDiv").dialog({
