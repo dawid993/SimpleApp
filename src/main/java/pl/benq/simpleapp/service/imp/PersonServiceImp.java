@@ -3,6 +3,9 @@ package pl.benq.simpleapp.service.imp;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,6 +17,7 @@ import pl.benq.simpleapp.service.PersonService;
 @Transactional
 public class PersonServiceImp implements PersonService {
 
+	private static final Integer MAX_PER_PAGE = 3;
 	@Autowired
 	PersonRepository personRepository;
 	
@@ -35,6 +39,12 @@ public class PersonServiceImp implements PersonService {
 
 	public void delete(Person person) {
 		personRepository.delete(person);
+	}
+
+	public Page<Person> getPersonPage(Integer currentPage) {
+		PageRequest request = 
+				new PageRequest(currentPage-1, MAX_PER_PAGE);		
+		return personRepository.findAll(request);
 	}
 	
 }
