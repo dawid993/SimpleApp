@@ -22,12 +22,13 @@
 	<c:url value="/app/persons/${currentPage-1}" var="prePage" />
 	<c:url value="/app/persons/${currentPage+1}" var="nextPage" />
 	<c:url value="/app/persons/${totalPages}" var="lastPage" />
-
+	
 	<h1>Persons</h1>
+	<h2>Basic information</h2>
 	<div id="paging" class="pagination-div">
 		<ul class="pagination">
 			<c:choose>
-				<c:when test="${currentPage-1 gt 0}">
+				<c:when test="${currentPage gt 1}">
 					<li><a href="${firstPage}">&lt;&lt;</a></li>
 					<li><a href="${prePage}">&lt;</a></li>
 				</c:when>
@@ -95,12 +96,18 @@
 	</div>
 	
 	<div id="phonediv" style="padding-top: 10px"></div>
-	<div id="phoneAddDiv" title="Add new phone">
+	<div id="phoneAddDiv" title="Add new phone" class="phone-dialog-form">
 		<form name="phoneform" class="dialog-form">
-			<label>Type</label> <input type="text" id="type" /> <label>Number</label>
-			<input type="text" id="number" />
+			<label>Type</label> 
+			<select id="phoneType">
+				<c:forEach items="${phoneTypes}" var="type" >
+					<option value="${type.id}">${type.phoneType}</option>
+				</c:forEach>
+			</select> 
+			<label>Number</label>
+			<input type="text" id="number" onchange="validNumber()"/>
 		</form>
-		<button id="phone-add-submit-button">Add</button>
+		<button id="phone-add-submit-button" class="btn btn-default" disabled="disabled">Add</button>
 	</div>
 
 	<script>
@@ -108,6 +115,7 @@
 		var DIALOG;
 
 		$(function() {
+			validNumber();
 			$("button.showbutton")
 					.click(
 							function() {
@@ -138,7 +146,7 @@
 										.ajax({
 											url : "${pageContext.request.contextPath}/app/addPhone",
 											type : "POST",
-											data : "type=" + $("#type").val()
+											data : "type=" + $("#phoneType").val()
 													+ "&number="
 													+ $("#number").val()
 													+ "&id="
@@ -161,7 +169,7 @@
 			var htmlGenerate = "<h2>Phones</h2><table class=\"table\" <tr><th>Type</th><th>Number</th></tr>";
 			for (i = 0; i < response.length; i++) {
 				htmlGenerate += "<tr>";
-				htmlGenerate += "<td>" + response[i].type + "</td>";
+				htmlGenerate += "<td>" + response[i].phoneType.phoneType + "</td>";
 				htmlGenerate += "<td>" + response[i].number + "</td>";
 				htmlGenerate += "</tr>";
 			}
@@ -169,6 +177,21 @@
 			htmlGenerate += "</table>";
 			$("#phonediv").html(htmlGenerate);
 			$("#phonediv").slideDown();
+		}
+		
+		function validNumber()
+		{
+			var number = $("#number");
+			var regex = new RegExp("^(\\(\\+\\d{2}\\))?(\\d{3})(\\d{4}|\\d{6})$");
+			if(regex.test(number.val())){
+				number.css("border-bottom-color","green");
+				$("#phone-add-submit-button").prop("disabled",false);
+				
+			}
+			else{
+				number.css("border-bottom-color","red");
+				$("#phone-add-submit-button").prop("disabled",true);
+			}
 		}
 
 		DIALOG = $("#phoneAddDiv").dialog({

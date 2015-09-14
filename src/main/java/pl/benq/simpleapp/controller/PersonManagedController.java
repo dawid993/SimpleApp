@@ -14,7 +14,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import pl.benq.simpleapp.model.Person;
 import pl.benq.simpleapp.model.Phone;
+import pl.benq.simpleapp.model.PhoneType;
 import pl.benq.simpleapp.service.PersonService;
+import pl.benq.simpleapp.service.PhoneTypeService;
 
 @Controller
 public class PersonManagedController {
@@ -22,6 +24,9 @@ public class PersonManagedController {
 	private final String personsView = "users";
 	@Autowired
 	PersonService personService;
+	
+	@Autowired
+	PhoneTypeService phoneTypeService;
 
 	@RequestMapping("/persons/{page}")
 	public String getPersonPage(@PathVariable("page") Integer pageNumber,Model model) {
@@ -36,6 +41,8 @@ public class PersonManagedController {
 		model.addAttribute("persons", page.getContent());
 		model.addAttribute("totalPages", page.getTotalPages());
 		
+		model.addAttribute("phoneTypes",phoneTypeService.findAll());
+		
 		return personsView;
 	}
 
@@ -46,14 +53,19 @@ public class PersonManagedController {
 
 	@RequestMapping(value="/addPhone")
 	public @ResponseBody List<Phone> addPhoneForPersonAndReturnPhones(@RequestParam Map<String,String> parameters) {
+		long id = Long.parseLong(parameters.get("id"));
+		long phoneTypeId = Long.parseLong(parameters.get("type"));		
+		
+		Person person = personService.find(id);
+		PhoneType type = phoneTypeService.find(phoneTypeId);
+		
 		Phone phone = new Phone();
 		phone.setNumber(parameters.get("number"));
-		phone.setType(parameters.get("type"));
-		long id = Long.parseLong(parameters.get("id"));
-		Person person = personService.find(id);
 		phone.setOwner(person);
+		phone.setPhoneType(type);
 		person.getPhones().add(phone);
 		personService.update(person);
+		
 		return person.getPhones();
 	}
 }

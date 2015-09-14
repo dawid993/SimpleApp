@@ -26,7 +26,6 @@
 
 .ui-dialog .ui-dialog-titlebar {
 	font-size: 16px;
-	background: #E47070;;
 }
 
 .table td{
@@ -38,6 +37,13 @@ text-align: left;
 	margin-left: 40%;	
 }
 
-h1{
+h1,h2{
 	text-align: center;
+}
+
+
+.phone-dialog-form input[type="text"]{
+	border-width: 0px;
+	border-bottom-width: 3px;
+	border-bottom-color: black;	
 }
