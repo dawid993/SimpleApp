@@ -148,7 +148,7 @@
 											type : "POST",
 											data : "type=" + $("#phoneType").val()
 													+ "&number="
-													+ $("#number").val()
+													+ encodeURIComponent($("#number").val())
 													+ "&id="
 													+ LAST_CLICKED_BUTTON,
 											success : function(response) {

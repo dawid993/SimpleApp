@@ -45,12 +45,4 @@ public class NumberFormatterCreator implements AbstractNumberCreator {
 		else
 			return false;
 	}
-
-	public static void main(String[] args) {
-		NumberFormatterCreator creator = new NumberFormatterCreator();
-		String num = "(+12)433212112";
-		AbstractNumberFormatter formatter = creator.create(num);
-		System.out.println(formatter.getFormatedNumber());
-	}
-
 }

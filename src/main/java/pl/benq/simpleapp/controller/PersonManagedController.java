@@ -17,6 +17,9 @@ import pl.benq.simpleapp.model.Phone;
 import pl.benq.simpleapp.model.PhoneType;
 import pl.benq.simpleapp.service.PersonService;
 import pl.benq.simpleapp.service.PhoneTypeService;
+import pl.benq.simpleapp.util.numberformat.AbstractNumberCreator;
+import pl.benq.simpleapp.util.numberformat.AbstractNumberFormatter;
+import pl.benq.simpleapp.util.numberformat.NumberFormatterCreator;
 
 @Controller
 public class PersonManagedController {
@@ -24,48 +27,55 @@ public class PersonManagedController {
 	private final String personsView = "users";
 	@Autowired
 	PersonService personService;
-	
+
 	@Autowired
 	PhoneTypeService phoneTypeService;
 
 	@RequestMapping("/persons/{page}")
-	public String getPersonPage(@PathVariable("page") Integer pageNumber,Model model) {
+	public String getPersonPage(@PathVariable("page") Integer pageNumber, Model model) {
 		Page<Person> page = personService.getPersonPage(pageNumber);
 		Integer currentPage = pageNumber;
-		Integer beginPage = Math.max(1, currentPage-5);
-		Integer endPage = Math.min(beginPage+10,page.getTotalPages());
-		
+		Integer beginPage = Math.max(1, currentPage - 5);
+		Integer endPage = Math.min(beginPage + 10, page.getTotalPages());
+
 		model.addAttribute("currentPage", currentPage);
 		model.addAttribute("begin", beginPage);
 		model.addAttribute("end", endPage);
 		model.addAttribute("persons", page.getContent());
 		model.addAttribute("totalPages", page.getTotalPages());
-		
-		model.addAttribute("phoneTypes",phoneTypeService.findAll());
-		
+
+		model.addAttribute("phoneTypes", phoneTypeService.findAll());
+
 		return personsView;
 	}
 
-	@RequestMapping(value="/personphones")
+	@RequestMapping(value = "/personphones")
 	public @ResponseBody List<Phone> getUserPhones(@RequestParam("id") int personId) {
 		return personService.find(personId).getPhones();
 	}
 
-	@RequestMapping(value="/addPhone")
-	public @ResponseBody List<Phone> addPhoneForPersonAndReturnPhones(@RequestParam Map<String,String> parameters) {
+	@RequestMapping(value = "/addPhone")
+	public @ResponseBody List<Phone> addPhoneForPersonAndReturnPhones(@RequestParam Map<String, String> parameters) {
 		long id = Long.parseLong(parameters.get("id"));
-		long phoneTypeId = Long.parseLong(parameters.get("type"));		
-		
+		long phoneTypeId = Long.parseLong(parameters.get("type"));
+		String number = parameters.get("number");
+
 		Person person = personService.find(id);
 		PhoneType type = phoneTypeService.find(phoneTypeId);
-		
 		Phone phone = new Phone();
-		phone.setNumber(parameters.get("number"));
+		phone.setNumber(getFormattedNumber(number));
 		phone.setOwner(person);
 		phone.setPhoneType(type);
 		person.getPhones().add(phone);
 		personService.update(person);
-		
+
 		return person.getPhones();
+	}
+
+	private String getFormattedNumber(String number) {
+		AbstractNumberCreator creator = new NumberFormatterCreator();
+		AbstractNumberFormatter formatter = creator.create(number);
+		return formatter.getFormatedNumber();
+
 	}
 }
