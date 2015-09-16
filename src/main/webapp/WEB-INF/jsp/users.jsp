@@ -4,18 +4,18 @@
 <%@ page isELIgnored="false"%>
 <html>
 <head>
+<script
+	src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+<script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+<script src="http://code.jquery.com/ui/1.11.1/jquery-ui.min.js"></script>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <link rel="stylesheet"
 	href="https://code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.css" />
 <link rel="stylesheet" type="text/css"
 	href="<c:url value="/app/css/main.css" />">
 <link rel="stylesheet"
 	href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-<script
-	src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-<script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
-<script src="http://code.jquery.com/ui/1.11.1/jquery-ui.min.js"></script>
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Insert title here</title>
+<title>Person Viewer</title>
 </head>
 <body>
 	<c:url value="/app/persons/1" var="firstPage" />
@@ -182,6 +182,8 @@
 		function validNumber()
 		{
 			var number = $("#number");
+			number.val(number.val().replace(/\s/g,""));
+			
 			var regex = new RegExp("^(\\(\\+\\d{2}\\))?(\\d{3})(\\d{4}|\\d{6})$");
 			if(regex.test(number.val())){
 				number.css("border-bottom-color","green");
