@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -49,12 +50,12 @@ public class PersonManagedController {
 		return personsView;
 	}
 
-	@RequestMapping(value = "/personphones")
+	@RequestMapping(value = "/personphones",method=RequestMethod.GET)
 	public @ResponseBody List<Phone> getUserPhones(@RequestParam("id") int personId) {
 		return personService.find(personId).getPhones();
 	}
 
-	@RequestMapping(value = "/addPhone")
+	@RequestMapping(value = "/addPhone",method=RequestMethod.POST)
 	public @ResponseBody List<Phone> addPhoneForPersonAndReturnPhones(@RequestParam Map<String, String> parameters) {
 		long id = Long.parseLong(parameters.get("id"));
 		long phoneTypeId = Long.parseLong(parameters.get("type"));

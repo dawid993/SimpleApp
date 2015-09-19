@@ -159,9 +159,15 @@
 											}
 										})
 							})
+							
+			DIALOG = $("#phoneAddDiv").dialog({
+				autoOpen : false,
+				modal : true,
+			})
 		})
 
 		function showDialog() {
+			DIALOG.find("#number").val("");
 			DIALOG.find("#number").css("border-bottom-color","red");
 			DIALOG.find("#phone-add-submit-button").prop("disabled",true);
 			DIALOG.dialog("open");
@@ -196,12 +202,7 @@
 				number.css("border-bottom-color","red");
 				$("#phone-add-submit-button").prop("disabled",true);
 			}
-		}
-
-		DIALOG = $("#phoneAddDiv").dialog({
-			autoOpen : false,
-			modal : true,
-		})
+		}		
 	</script>
 </body>
 </html>

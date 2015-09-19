@@ -53,5 +53,4 @@ public class PhoneSelector {
 		xmlPhoneDesc.setType(phone.getPhoneType().getPhoneType());
 		return xmlPhoneDesc;
 	}
-
 }
