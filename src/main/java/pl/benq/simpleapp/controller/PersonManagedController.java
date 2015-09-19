@@ -12,15 +12,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import pl.benq.simpleapp.model.Person;
 import pl.benq.simpleapp.model.Phone;
 import pl.benq.simpleapp.model.PhoneType;
+import pl.benq.simpleapp.model.PhoneViewDescriptor;
 import pl.benq.simpleapp.service.PersonService;
 import pl.benq.simpleapp.service.PhoneTypeService;
 import pl.benq.simpleapp.util.numberformat.AbstractNumberCreator;
 import pl.benq.simpleapp.util.numberformat.AbstractNumberFormatter;
 import pl.benq.simpleapp.util.numberformat.NumberFormatterCreator;
+import pl.benq.simpleapp.util.phoneselect.PhoneSelector;
 
 @Controller
 public class PersonManagedController {
@@ -71,6 +74,15 @@ public class PersonManagedController {
 		personService.update(person);
 
 		return person.getPhones();
+	}
+	
+	@RequestMapping("/download")
+	public ModelAndView getXLS()
+	{
+		List<PhoneViewDescriptor> descriptors;
+		PhoneSelector selector = new PhoneSelector(personService.findAll());
+		descriptors = selector.selectPhones();
+		return new ModelAndView("exelView","phones",descriptors);
 	}
 
 	private String getFormattedNumber(String number) {
