@@ -17,6 +17,7 @@ public class NumberFormatterCreator implements AbstractNumberCreator {
 			rawNumber = removePrefixFromNumber(rawNumber);
 		}
 		Integer numberLength = rawNumber.length();
+		
 		switch(numberLength){
 			case MOBILE_TYPE_NUMBER_LENGTH:
 					return new MobileNumberFormatter(rawNumber,prefix);
