@@ -162,6 +162,8 @@
 		})
 
 		function showDialog() {
+			DIALOG.find("#number").css("border-bottom-color","red");
+			DIALOG.find("#phone-add-submit-button").prop("disabled",true);
 			DIALOG.dialog("open");
 		}
 
