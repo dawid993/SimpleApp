@@ -2,47 +2,41 @@ package pl.benq.simpleapp.util.phoneselect;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import pl.benq.simpleapp.model.Person;
 import pl.benq.simpleapp.model.Phone;
 import pl.benq.simpleapp.model.PhoneXLSDescriptor;
 
 public class PhoneSelector {
-	public static final String MOBILE_TYPE = "Mobile";
+	public static final String MOBILE_TYPE = "Mobile";	
 	
-	List<Person> persons;
-	List<PhoneXLSDescriptor> selectedPhones;
+	private Predicates predicates;
 
-	public PhoneSelector(List<Person> persons) {
-		this.persons = persons;
-		this.selectedPhones = new ArrayList<PhoneXLSDescriptor>();
+	public PhoneSelector() {
+		this.predicates = new Predicates();
 	}
 
-	public List<PhoneXLSDescriptor> selectPhones() {
+	public List<PhoneXLSDescriptor> selectPhones(List<Person> persons) {
+		List<PhoneXLSDescriptor> selectedPhones = new ArrayList<PhoneXLSDescriptor>();
+		Predicate<Phone> mobilePredicate = predicates.getPredicate(Predicates.MOBILE_TYPE);
+		
 		for (Person person : persons) {
 			if (person.getPhones().size() > 0) 
-				findPhone(person.getPhones());
+				selectedPhones.add(findPhone(person.getPhones(),mobilePredicate));
 		}
 		return selectedPhones;
 	}
 
-	private void findPhone(List<Phone> phones) {
-		Phone lastVerifiedPhone = null;
-		PhoneXLSDescriptor xmlPhoneDesc = null;
-		
-		for (Phone phone : phones) {
-			if(phone.getPhoneType().getPhoneType().equals(PhoneSelector.MOBILE_TYPE)){
-				xmlPhoneDesc = getPhoneXLSDescription(phone);
-				selectedPhones.add(xmlPhoneDesc);
-				return;
-			}
-			else
-				lastVerifiedPhone = phone;
-		}
-		
-		xmlPhoneDesc = getPhoneXLSDescription(lastVerifiedPhone);
-		selectedPhones.add(xmlPhoneDesc);
-		
+	private PhoneXLSDescriptor findPhone(List<Phone> phones,Predicate<Phone> predicate) {
+		Phone selectedPhone;
+		List<Phone> criteriaPhones = phones.stream().filter(predicate).collect(Collectors.toList());
+		if(criteriaPhones.size() == 0)
+			selectedPhone = phones.get(0);
+		else
+			selectedPhone = criteriaPhones.get(0);
+		return getPhoneXLSDescription(selectedPhone);
 	}
 
 	private PhoneXLSDescriptor getPhoneXLSDescription(Phone phone) {
