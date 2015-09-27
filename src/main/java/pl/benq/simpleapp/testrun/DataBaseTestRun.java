@@ -8,7 +8,7 @@ import javax.transaction.SystemException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import pl.benq.simpleapp.model.PhoneXLSDescriptor;
+import pl.benq.simpleapp.model.PhoneViewDescriptor;
 import pl.benq.simpleapp.service.PersonService;
 import pl.benq.simpleapp.util.phoneselect.PhoneSelector;
 
@@ -18,10 +18,10 @@ public class DataBaseTestRun {
 		PersonService service = (PersonService) context.getBean("personServiceImp");
 		
 			
-		List<PhoneXLSDescriptor> descriptors;
+		List<PhoneViewDescriptor> descriptors;
 		PhoneSelector selector = new PhoneSelector();
 		descriptors = selector.selectPhones(service.findAll());
-		for(PhoneXLSDescriptor desc:descriptors)
+		for(PhoneViewDescriptor desc:descriptors)
 			System.out.println(desc.getOwnerName()+" "+desc.getOnwerSurname()+" "+desc.getNumber()+" "+desc.getType());
 		}
 }

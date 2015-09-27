@@ -1,6 +1,6 @@
 package pl.benq.simpleapp.model;
 
-public class PhoneXLSDescriptor {
+public class PhoneViewDescriptor {
 	private String ownerName;
 	private String onwerSurname;
 	private String number;
