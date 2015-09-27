@@ -10,7 +10,9 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.SecondaryTable;
 import javax.persistence.SequenceGenerator;
@@ -52,6 +54,40 @@ public class Person {
 	@OneToMany(mappedBy = "owner", cascade = { CascadeType.PERSIST, CascadeType.MERGE }, 
 			fetch = FetchType.EAGER,orphanRemoval=true)
 	private List<Phone> phones;
+	
+	@OneToOne
+	@JoinColumn(name="suite_id",referencedColumnName="suite_id")
+	private Suite suite;
+	
+	@OneToMany(mappedBy="person")
+	private List<MonthPowerUsage> powerUsage;
+	
+	@OneToMany(mappedBy="person")
+	private List<Invoice> invoices;
+
+	public List<Invoice> getInvoices() {
+		return invoices;
+	}
+
+	public void setInvoices(List<Invoice> invoices) {
+		this.invoices = invoices;
+	}
+
+	public List<MonthPowerUsage> getPowerUsage() {
+		return powerUsage;
+	}
+
+	public void setPowerUsage(List<MonthPowerUsage> powerUsage) {
+		this.powerUsage = powerUsage;
+	}
+
+	public Suite getSuite() {
+		return suite;
+	}
+
+	public void setSuite(Suite suite) {
+		this.suite = suite;
+	}
 
 	public String getName() {
 		return name;

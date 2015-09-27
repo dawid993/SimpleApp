@@ -29,7 +29,7 @@ public class PhoneType {
 	@Column(name="phone_type_value",nullable=false,length=20)
 	private String phoneType;
 	
-	@OneToMany
+	@OneToMany(mappedBy="phoneType")
 	private List<Phone> phones;
 
 	public String getPhoneType() {
