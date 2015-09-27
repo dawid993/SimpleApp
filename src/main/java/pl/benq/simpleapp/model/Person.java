@@ -58,6 +58,17 @@ public class Person {
 	@OneToOne
 	@JoinColumn(name="suite_id",referencedColumnName="suite_id")
 	private Suite suite;
+	
+	@OneToMany(mappedBy="person")
+	private List<MonthPowerUsage> powerUsage;
+
+	public List<MonthPowerUsage> getPowerUsage() {
+		return powerUsage;
+	}
+
+	public void setPowerUsage(List<MonthPowerUsage> powerUsage) {
+		this.powerUsage = powerUsage;
+	}
 
 	public Suite getSuite() {
 		return suite;
