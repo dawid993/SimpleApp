@@ -8,20 +8,24 @@ import javax.transaction.SystemException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import pl.benq.simpleapp.model.PhoneViewDescriptor;
+import pl.benq.simpleapp.model.MonthPowerUsage;
+import pl.benq.simpleapp.model.Person;
 import pl.benq.simpleapp.service.PersonService;
-import pl.benq.simpleapp.util.phoneselect.PhoneSelector;
+import pl.benq.simpleapp.util.billcalculate.BillCalculatorStrategy;
 
 public class DataBaseTestRun {
+	ApplicationContext context = new ClassPathXmlApplicationContext("spring-bean.xml");
+	PersonService service = (PersonService) context.getBean("personServiceImp");
+	BillCalculatorStrategy billCalculator=(BillCalculatorStrategy) context.getBean("billCalculatorPLStrategy");
 	public static void main(String[] args) throws IllegalStateException, SystemException, InterruptedException {
-		ApplicationContext context = new ClassPathXmlApplicationContext("spring-bean.xml");
-		PersonService service = (PersonService) context.getBean("personServiceImp");
+		DataBaseTestRun run = new DataBaseTestRun();
 		
-			
-		List<PhoneViewDescriptor> descriptors;
-		PhoneSelector selector = new PhoneSelector();
-		descriptors = selector.selectPhones(service.findAll());
-		for(PhoneViewDescriptor desc:descriptors)
-			System.out.println(desc.getOwnerName()+" "+desc.getOnwerSurname()+" "+desc.getNumber()+" "+desc.getType());
+		Person person =run.service.find(1);
+		List<MonthPowerUsage> usages = run.service.getMonthPowerUsage(person.getId());
+		for(MonthPowerUsage usage:usages){
+			System.out.println(usage.getPerson().getName());
 		}
+	}
+		
+		
 }

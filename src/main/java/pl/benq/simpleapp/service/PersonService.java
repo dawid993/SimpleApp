@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.data.domain.Page;
 
+import pl.benq.simpleapp.model.MonthPowerUsage;
 import pl.benq.simpleapp.model.Person;
 
 public interface PersonService {
@@ -18,5 +19,7 @@ public interface PersonService {
 	public void delete(Person person);
 	
 	public Page<Person> getPersonPage(Integer currentPage);
+	
+	public List<MonthPowerUsage> getMonthPowerUsage(Long id);
 
 }

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import pl.benq.simpleapp.dao.PersonRepository;
+import pl.benq.simpleapp.model.MonthPowerUsage;
 import pl.benq.simpleapp.model.Person;
 import pl.benq.simpleapp.service.PersonService;
 
@@ -44,6 +45,11 @@ public class PersonServiceImp implements PersonService {
 		PageRequest request = 
 				new PageRequest(currentPage-1, MAX_PER_PAGE);		
 		return personRepository.findAll(request);
+	}
+
+	@Override
+	public List<MonthPowerUsage> getMonthPowerUsage(Long id) {
+		return personRepository.getPersonMonthPowerUsages(id);
 	}
 	
 }

@@ -36,14 +36,14 @@ public class Suite {
 	private Person person;
 	
 	@OneToMany(mappedBy="suite")
-	private List<Invoice> invoices;
+	private List<Bill> bills;
 
-	public List<Invoice> getInvoices() {
-		return invoices;
+	public List<Bill> getBills() {
+		return bills;
 	}
 
-	public void setInvoices(List<Invoice> invoices) {
-		this.invoices = invoices;
+	public void setBills(List<Bill> bills) {
+		this.bills = bills;
 	}
 
 	public long getId() {

@@ -27,7 +27,7 @@ public class MonthPowerUsage {
 	
 	@Column(name="usage_kwh",nullable=false)
 	private Double usageKWh;
-	
+
 	@Temporal(TemporalType.DATE)
 	@Column(name="from_date",nullable=false)
 	private Date fromDate;
@@ -59,7 +59,15 @@ public class MonthPowerUsage {
 	public Date getToDate() {
 		return toDate;
 	}
+	
+	public Double getUsageKWh() {
+		return usageKWh;
+	}
 
+	public void setUsageKWh(Double usageKWh) {
+		this.usageKWh = usageKWh;
+	}
+	
 	public void setToDate(Date toDate) {
 		this.toDate = toDate;
 	}

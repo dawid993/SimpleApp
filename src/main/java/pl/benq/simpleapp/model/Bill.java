@@ -15,13 +15,13 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 @Entity
-@Table(name="invoice")
-@SequenceGenerator(name=Invoice.SEQUENCE_NAME,sequenceName=Invoice.SEQUENCE_NAME,initialValue=1,allocationSize=1)
-public class Invoice {
+@Table(name="bills")
+@SequenceGenerator(name=Bill.SEQUENCE_NAME,sequenceName=Bill.SEQUENCE_NAME,initialValue=1,allocationSize=1)
+public class Bill {
 	public static final String SEQUENCE_NAME = "INVOICE_SEQUENCE";
 	
 	@Id
-	@GeneratedValue(strategy=GenerationType.SEQUENCE,generator=SEQUENCE_NAME)
+	@GeneratedValue(strategy=GenerationType.SEQUENCE,generator=Bill.SEQUENCE_NAME)
 	@Column(name="invoice_id")
 	private long id;
 	

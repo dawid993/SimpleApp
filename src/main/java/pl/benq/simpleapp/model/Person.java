@@ -27,7 +27,6 @@ import javax.persistence.TemporalType;
 @SecondaryTable(name = "person_details",pkJoinColumns=
 		@PrimaryKeyJoinColumn(name="person_details_id",referencedColumnName="person_id"))
 public class Person {
-
 	public static final String SEQUENCE_NAME = "PERSON_SEQUENCE";
 
 	@Id
@@ -59,18 +58,18 @@ public class Person {
 	@JoinColumn(name="suite_id",referencedColumnName="suite_id")
 	private Suite suite;
 	
-	@OneToMany(mappedBy="person")
+	@OneToMany(mappedBy="person",cascade={CascadeType.PERSIST,CascadeType.MERGE})
 	private List<MonthPowerUsage> powerUsage;
 	
 	@OneToMany(mappedBy="person")
-	private List<Invoice> invoices;
-
-	public List<Invoice> getInvoices() {
-		return invoices;
+	private List<Bill> bills;
+	
+	public List<Bill> getBills() {
+		return bills;
 	}
 
-	public void setInvoices(List<Invoice> invoices) {
-		this.invoices = invoices;
+	public void setBills(List<Bill> bills) {
+		this.bills = bills;
 	}
 
 	public List<MonthPowerUsage> getPowerUsage() {
