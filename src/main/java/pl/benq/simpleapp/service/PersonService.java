@@ -21,5 +21,9 @@ public interface PersonService {
 	public Page<Person> getPersonPage(Integer currentPage);
 	
 	public List<MonthPowerUsage> getMonthPowerUsage(Long id);
+	
+	public Person addPhoneToPerson(Long personId,Long phoneId,String number);
+	
+	public void addPowerUsageForPerson(Long personId,MonthPowerUsage powerUsage);
 
 }

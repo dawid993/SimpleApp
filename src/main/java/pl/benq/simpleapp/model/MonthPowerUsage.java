@@ -14,6 +14,8 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 @Entity
 @Table(name="month_power_usage")
 @SequenceGenerator(name=MonthPowerUsage.SEQUENCE_NAME,sequenceName=MonthPowerUsage.SEQUENCE_NAME,initialValue=1,allocationSize=1)
@@ -30,10 +32,12 @@ public class MonthPowerUsage {
 
 	@Temporal(TemporalType.DATE)
 	@Column(name="from_date",nullable=false)
+	@DateTimeFormat(pattern = "dd/MM/yyyy")
 	private Date fromDate;
 	
 	@Temporal(TemporalType.DATE)
 	@Column(name="to_date",nullable=false)
+	@DateTimeFormat(pattern = "dd/MM/yyyy")
 	private Date toDate;
 	
 	@ManyToOne

@@ -61,7 +61,7 @@ public class Person {
 	@OneToMany(mappedBy="person",cascade={CascadeType.PERSIST,CascadeType.MERGE})
 	private List<MonthPowerUsage> powerUsage;
 	
-	@OneToMany(mappedBy="person")
+	@OneToMany(mappedBy="person",cascade={CascadeType.PERSIST,CascadeType.MERGE})
 	private List<Bill> bills;
 	
 	public List<Bill> getBills() {
@@ -139,5 +139,4 @@ public class Person {
 	public long getId() {
 		return id;
 	}
-
 }

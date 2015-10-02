@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,7 +17,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import pl.benq.simpleapp.model.Person;
 import pl.benq.simpleapp.model.Phone;
-import pl.benq.simpleapp.model.PhoneType;
 import pl.benq.simpleapp.model.PhoneViewDescriptor;
 import pl.benq.simpleapp.service.PersonService;
 import pl.benq.simpleapp.service.PhoneTypeService;
@@ -29,6 +29,7 @@ import pl.benq.simpleapp.util.phoneselect.PhoneSelector;
 public class PersonManagedController {
 
 	private final String personsView = "users";
+
 	@Autowired
 	PersonService personService;
 
@@ -53,36 +54,27 @@ public class PersonManagedController {
 		return personsView;
 	}
 
-	@RequestMapping(value = "/personphones",method=RequestMethod.GET)
+	@RequestMapping(value = "/personphones", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public @ResponseBody List<Phone> getUserPhones(@RequestParam("id") int personId) {
 		return personService.find(personId).getPhones();
 	}
 
-	@RequestMapping(value = "/addPhone",method=RequestMethod.POST)
+	@RequestMapping(value = "/addPhone", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	public @ResponseBody List<Phone> addPhoneForPersonAndReturnPhones(@RequestParam Map<String, String> parameters) {
 		long id = Long.parseLong(parameters.get("id"));
 		long phoneTypeId = Long.parseLong(parameters.get("type"));
-		String number = parameters.get("number");
-
-		Person person = personService.find(id);
-		PhoneType type = phoneTypeService.find(phoneTypeId);
-		Phone phone = new Phone();
-		phone.setNumber(getFormattedNumber(number));
-		phone.setOwner(person);
-		phone.setPhoneType(type);
-		person.getPhones().add(phone);
-		personService.update(person);
+		String number = getFormattedNumber(parameters.get("number"));
+		Person person = personService.addPhoneToPerson(id, phoneTypeId, number);
 
 		return person.getPhones();
 	}
-	
+
 	@RequestMapping("/download")
-	public ModelAndView getXLS()
-	{
+	public ModelAndView getXLS() {
 		List<PhoneViewDescriptor> descriptors;
 		PhoneSelector selector = new PhoneSelector();
 		descriptors = selector.selectPhones(personService.findAll());
-		return new ModelAndView("exelView","phones",descriptors);
+		return new ModelAndView("exelView", "phones", descriptors);
 	}
 
 	private String getFormattedNumber(String number) {
